@@ -1,9 +1,13 @@
 // src/controllers/taskController.js
 const Task = require("../models/TaskModel");
+const mongoose = require("mongoose");
+const { ValidateId } = require("../utils/validateId");
 
 exports.getAllTasks = async (req, res) => {
   try {
-    const tasks = await Task.find({ userId: req.user._id });
+    const tasks = await Task.Task.find({
+      userId: req.user?._id || "615d1c601dcab5e56d6eb28f",
+    });
     res.json(tasks);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -12,9 +16,13 @@ exports.getAllTasks = async (req, res) => {
 
 exports.getTaskById = async (req, res) => {
   try {
-    const task = await Task.findOne({
+    // To Check Correct Id
+    if (ValidateId(req.params.id) === false) {
+      return res.status(400).json({ error: "Invalid Id" });
+    }
+    const task = await Task.Task.findOne({
       _id: req.params.id,
-      userId: req.user._id,
+      userId: req.user?._id || "615d1c601dcab5e56d6eb28f",
     });
     if (!task) return res.status(404).json({ message: "Task not found" });
     res.json(task);
@@ -46,8 +54,14 @@ exports.createTask = async (req, res) => {
 
 exports.updateTask = async (req, res) => {
   try {
-    const task = await Task.findOneAndUpdate(
-      { _id: req.params.id, userId: req.user._id },
+    if (ValidateId(req.params.id) === false) {
+      return res.status(400).json({ error: "Invalid Id" });
+    }
+    const task = await Task.Task.findOneAndUpdate(
+      {
+        _id: req.params.id,
+        userId: req.user?._id || "615d1c601dcab5e56d6eb28f",
+      },
       req.body,
       { new: true }
     );
@@ -61,9 +75,12 @@ exports.updateTask = async (req, res) => {
 
 exports.deleteTask = async (req, res) => {
   try {
-    const task = await Task.findOneAndDelete({
+    if (ValidateId(req.params.id) === false) {
+      return res.status(400).json({ error: "Invalid Id" });
+    }
+    const task = await Task.Task.findOneAndDelete({
       _id: req.params.id,
-      userId: req.user._id,
+      userId: req.user?._id || "615d1c601dcab5e56d6eb28f",
     });
 
     if (!task) return res.status(404).json({ message: "Task not found" });
