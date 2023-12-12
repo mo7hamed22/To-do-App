@@ -2,7 +2,7 @@
 const Task = require("../models/TaskModel");
 const mongoose = require("mongoose");
 const { ValidateId } = require("../utils/validateId");
-
+// Get ALL Tasks
 exports.getAllTasks = async (req, res) => {
   try {
     const tasks = await Task.Task.find({
