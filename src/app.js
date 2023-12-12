@@ -16,8 +16,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 mongoose
   .connect(
-    process.env.MONGO_URI ||
-      "mongodb+srv://eissa2:Mohamed_22@cluster0.qri5twp.mongodb.net/tasks?retryWrites=true&w=majority",
+    process.env.MONGO_URI 
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
